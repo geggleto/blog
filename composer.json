@@ -1,0 +1,22 @@
+{
+  "name": "geggleto/blog",
+  "description": "Basic PHP Blog ",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Glenn Eggleton",
+      "email": "geggleto@gmail.com"
+    }
+  ],
+  "require": {
+    "slim/slim": "^3.0@dev",
+    "slim/twig-view": "^2.0",
+    "vlucas/spot2": "2.0.4"
+  },
+  "autoload": {
+    "psr-4": {
+      "Blog\\": "src"
+    }
+  }
+
+}
