@@ -5,10 +5,11 @@
  * Date: 2015-09-02
  * Time: 1:15 PM
  */
-use Blog\Blog\Actions\CreateAction as BlogCreateAction;
-use Blog\Blog\Actions\EditAction as BlogEditAction;
-use Blog\Blog\Actions\HomePageAction;
 
-$app->get('/', HomePageAction::class);
-$app->put('/blog/{id}', BlogEditAction::class);
-$app->post('/blog', BlogCreateAction::class);
+use Blog\Blog\BlogController;
+
+$app->get(      '/',            BlogController::class . ":homePage");
+$app->put(      '/blog/{id}',   BlogController::class . ":update");
+$app->post(     '/blog',        BlogController::class . ":create");
+$app->get(      '/blog/{id}',   BlogController::class . ":get");
+$app->delete(   '/blog/{id}',   BlogController::class . ":remove");

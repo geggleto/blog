@@ -6,12 +6,11 @@
  * Time: 1:13 PM
  */
 
-use Blog\Blog\Actions\CreateAction;
-use Blog\Blog\Domain\BlogDomain;
+use Blog\Blog\BlogDomain;
 use Blog\Responder\Responder;
 use Slim\Views\Twig;
 use Slim\Views\TwigExtension;
-use Blog\Blog\Actions\HomePageAction;
+use Blog\Blog\BlogController;
 
 return [
     "settings" => [
@@ -39,24 +38,14 @@ return [
 
         return $view;
     },
-    HomePageAction::class =>
-    /**
-     * @param $c
-     * @return HomePageAction
-     */
+    BlogController::class =>
         function ($c) {
-            return new HomePageAction(
-                $c[BlogDomain::class],
-                $c[Responder::class]
+            return new BlogController(
+                $c[Responder::class],
+                $c[BlogDomain::class]
             );
     },
-    CreateAction::class => /**
-     * @param $c
-     * @return CreateAction
-     */
-        function ($c) {
-            return new CreateAction();
-    },
+
     PDO::class => /**
      * @param $c
      * @return \PDO
