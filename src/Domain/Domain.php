@@ -7,6 +7,7 @@
  */
 
 namespace Blog\Domain;
+use Spot\Locator;
 
 /**
  * Class Domain
@@ -16,14 +17,16 @@ namespace Blog\Domain;
 class Domain
 {
     /**
-     * @var \Blog\Domain\PDO
+     * @var \Spot\Locator
      */
-    protected $pdo;
+    protected $locator;
 
     /**
-     * @param \Blog\Domain\PDO $PDO
+     * Domain constructor.
+     *
+     * @param \Spot\Locator $locator
      */
-    public function __construct(\PDO $PDO) {
-        $this->pdo = $PDO;
+    public function __construct(Locator $locator) {
+        $this->locator = $locator;
     }
 }

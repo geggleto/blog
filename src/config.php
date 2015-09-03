@@ -11,6 +11,8 @@ use Blog\Responder\Responder;
 use Slim\Views\Twig;
 use Slim\Views\TwigExtension;
 use Blog\Blog\BlogController;
+use Spot\Locator;
+use Spot\Config;
 
 return [
     "settings" => [
@@ -18,6 +20,7 @@ return [
             "dsn" => "mysql:host=localhost;dbname=blog",
             "username" => "root",
             "password" => "",
+            "spot2" => "mysql://root@localhost/blog"
         ],
         "templatesDirectory" => "../templates"
     ],
@@ -62,5 +65,14 @@ return [
     },
     Responder::class => function ($c) {
         return new Responder($c['view']);
+    },
+    Locator::class => function ($c) {
+        $cfg = new Config();
+
+        $cfg->addConnection('mysql', $c['settings']['db']['spot2']);
+
+        return new \Spot\Locator($cfg);
     }
+
+
 ];
