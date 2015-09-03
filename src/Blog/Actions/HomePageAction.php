@@ -6,12 +6,12 @@
  * Time: 2:03 PM
  */
 
-namespace Blog\Action\Blog;
+namespace Blog\Blog\Actions;
 
 
 use Blog\Action\IAction;
-use Blog\Domain\BlogDomain;
-use Blog\Responder\BlogResponder;
+use Blog\Blog\Domain\BlogDomain;
+use Blog\Responder\Responder;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -23,20 +23,22 @@ use Psr\Http\Message\ServerRequestInterface;
 class HomePageAction implements IAction
 {
     /**
-     * @var \Blog\Domain\BlogDomain
+     * @var \Blog\Blog\Domain\BlogDomain
      */
     private $domain;
 
     /**
-     * @var \Blog\Responder\BlogResponder
+     * @var \Blog\Responder\Responder
      */
     private $responder;
 
     /**
-     * @param \Blog\Domain\BlogDomain       $domain
-     * @param \Blog\Responder\BlogResponder $responder
+     * HomePageAction constructor.
+     *
+     * @param \Blog\Blog\Domain\BlogDomain $domain
+     * @param \Blog\Responder\Responder    $responder
      */
-    public function __construct(BlogDomain $domain, BlogResponder $responder) {
+    public function __construct(BlogDomain $domain, Responder $responder) {
         $this->domain = $domain;
         $this->responder = $responder;
     }
@@ -49,7 +51,7 @@ class HomePageAction implements IAction
      */
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, $args)
     {
-        return $this->responder->renderHomePage($response, []);
+        return $this->responder->renderTwigTemplate($response, "home.twig", []);
     }
 
 }

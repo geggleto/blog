@@ -6,7 +6,8 @@
  * Time: 2:41 PM
  */
 
-namespace Blog\Domain;
+namespace Blog\Blog\Domain;
+use Blog\Domain\Domain;
 
 /**
  * Class BlogDomain

@@ -6,11 +6,12 @@
  * Time: 1:13 PM
  */
 
-use Blog\Action\ActionFactory;
-use Blog\Domain\BlogDomain;
-use Blog\Responder\BlogResponder;
+use Blog\Blog\Actions\CreateAction;
+use Blog\Blog\Domain\BlogDomain;
+use Blog\Responder\Responder;
 use Slim\Views\Twig;
 use Slim\Views\TwigExtension;
+use Blog\Blog\Actions\HomePageAction;
 
 return [
     "settings" => [
@@ -38,23 +39,23 @@ return [
 
         return $view;
     },
-    \Blog\Action\Blog\HomePageAction::class =>
+    HomePageAction::class =>
     /**
      * @param $c
-     * @return \Blog\Action\Blog\HomePageAction
+     * @return HomePageAction
      */
         function ($c) {
-            return new \Blog\Action\Blog\HomePageAction(
+            return new HomePageAction(
                 $c[BlogDomain::class],
-                $c[BlogResponder::class]
+                $c[Responder::class]
             );
     },
-    \Blog\Action\Blog\CreateAction::class => /**
+    CreateAction::class => /**
      * @param $c
-     * @return \Blog\Action\Blog\CreateAction
+     * @return CreateAction
      */
         function ($c) {
-            return new \Blog\Action\Blog\CreateAction();
+            return new CreateAction();
     },
     PDO::class => /**
      * @param $c
@@ -70,7 +71,7 @@ return [
     BlogDomain::class => function ($c) {
         return new BlogDomain($c[PDO::class]);
     },
-    BlogResponder::class => function ($c) {
-        return new BlogResponder($c['view']);
+    Responder::class => function ($c) {
+        return new Responder($c['view']);
     }
 ];

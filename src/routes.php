@@ -5,9 +5,9 @@
  * Date: 2015-09-02
  * Time: 1:15 PM
  */
-use Blog\Action\Blog\CreateAction as BlogCreateAction;
-use Blog\Action\Blog\EditAction as BlogEditAction;
-use Blog\Action\Blog\HomePageAction;
+use Blog\Blog\Actions\CreateAction as BlogCreateAction;
+use Blog\Blog\Actions\EditAction as BlogEditAction;
+use Blog\Blog\Actions\HomePageAction;
 
 $app->get('/', HomePageAction::class);
 $app->put('/blog/{id}', BlogEditAction::class);

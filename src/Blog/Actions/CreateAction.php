@@ -6,7 +6,7 @@
  * Time: 1:48 PM
  */
 
-namespace Blog\Action\Blog;
+namespace Blog\Blog\Actions;
 
 
 use Blog\Action\IAction;
