@@ -28,26 +28,89 @@ class BlogDomain extends Domain
 
     /**
      * @param \Slim\Http\Request $request
-     * @return \Spot\Entity
+     * @return \Blog\Entities\Post
      * @throws \Spot\InvalidArgumentException
      */
     public function createPost(Request $request) {
         /** @var $mapper \Spot\Mapper */
         $mapper = $this->locator->mapper(Post::class);
 
-        $entity = $mapper->build([
-            'title' => $request->getParsedBody()['title'],
-            'body' => $request->getParsedBody()['body'],
-            'status' => $request->getParsedBody()['status'],
-            'date_created' => new \DateTime()
-        ]);
+        /** @var $entity \Blog\Entities\Post */
+        $entity = $mapper->build($this->postArrayFromRequest($request, true));
 
         $mapper->save($entity);
 
         return $entity;
     }
 
+    /**
+     * @param \Slim\Http\Request $request
+     * @return \Blog\Entities\Post
+     * @throws \Spot\InvalidArgumentException
+     */
     public function updatePost(Request $request) {
+        /** @var $mapper \Spot\Mapper */
         $mapper = $this->locator->mapper(Post::class);
+
+        /** @var $entity \Blog\Entities\Post */
+        $entity = $this->getPostEntity($request);
+
+        if ($entity !== false) {
+            $entity->data($this->postArrayFromRequest($request, false));
+            $mapper->save($entity);
+        }
+
+        return $entity;
+    }
+
+    /**
+     * @param \Slim\Http\Request $request
+     * @return \Blog\Entities\Post
+     */
+    public function removePost(Request $request) {
+        /** @var $mapper \Spot\Mapper */
+        $mapper = $this->locator->mapper(Post::class);
+
+        /** @var $entity \Blog\Entities\Post */
+        $entity = $this->getPostEntity($request);
+
+        if ($entity !== false) {
+            return $mapper->delete(Post::class, ['id' => $entity->id]);
+        } else {
+            return false;
+        }
+
+    }
+
+    /**
+     * @param \Slim\Http\Request $request
+     * @return \Blog\Entities\Post
+     */
+    public function getPostEntity(Request $request) {
+        /** @var $mapper \Spot\Mapper */
+        $mapper = $this->locator->mapper(Post::class);
+
+        /** @var $entity \Blog\Entities\Post */
+        $entity = $mapper->get($request->getParsedBody()['id']);
+
+        return $entity;
+    }
+
+    /**
+     * @param \Slim\Http\Request $request
+     * @param bool|false         $time
+     * @return array
+     */
+    protected function postArrayFromRequest(Request $request, $time = false) {
+        $out = [
+            'title' => $request->getParsedBody()['title'],
+            'body' => $request->getParsedBody()['body'],
+            'status' => $request->getParsedBody()['status'],
+        ];
+        if ($time) {
+            $out['date_created'] = new \DateTime();
+        }
+
+        return $out;
     }
 }

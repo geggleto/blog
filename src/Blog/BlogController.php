@@ -55,7 +55,8 @@ class BlogController
      * @return \Slim\Http\Response
      */
     public function get(Request $request, Response $response, $args) {
-        return $response;
+        $entity = $this->domain->getPostEntity($request);
+        return $this->responder->renderJSON($response, $entity->data());
     }
 
     /**
@@ -65,7 +66,8 @@ class BlogController
      * @return \Slim\Http\Response
      */
     public function update(Request $request, Response $response, $args) {
-        return $response;
+        $entity = $this->domain->updatePost($request);
+        return $this->responder->renderJSON($response, $entity->data());
     }
 
     /**
@@ -75,8 +77,10 @@ class BlogController
      * @return \Slim\Http\Response
      */
     public function remove(Request $request, Response $response, $args) {
-        return $response;
+        $entity = $this->domain->removePost($request);
+        return $this->responder->renderJSON($response, $entity->data());
     }
+
 
     /**
      * @param \Slim\Http\Request  $request
