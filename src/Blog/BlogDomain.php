@@ -113,4 +113,22 @@ class BlogDomain extends Domain
 
         return $out;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getLastFivePosts() {
+        /** @var $mapper \Spot\Mapper */
+        $mapper = $this->locator->mapper(Post::class);
+        return $mapper->where(['status' => 1])
+                ->limit(5)
+                ->order(['date_created' => 'DESC']);
+    }
+
+
+    public function migrate() {
+        /** @var $mapper \Spot\Mapper */
+        $mapper = $this->locator->mapper(Post::class);
+        $mapper->migrate();
+    }
 }

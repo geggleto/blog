@@ -89,6 +89,18 @@ class BlogController
      * @return \Psr\Http\Message\ResponseInterface
      */
     public function homePage(Request $request, Response $response, $args) {
+        $posts = $this->domain->getLastFivePosts();
         return $this->responder->renderTwigTemplate($response, "home.twig", []);
+    }
+
+    /**
+     * @param \Slim\Http\Request  $request
+     * @param \Slim\Http\Response $response
+     * @param                     $args
+     * @return \Slim\Http\Response
+     */
+    public function migrate(Request $request, Response $response, $args) {
+        $this->domain->migrate();
+        return $this->responder->renderJSON($response, ["status" => "done"]);
     }
 }

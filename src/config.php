@@ -7,6 +7,7 @@
  */
 
 use Blog\Blog\BlogDomain;
+use Blog\Middleware\SecurityMiddleware;
 use Blog\Responder\Responder;
 use Slim\Views\Twig;
 use Slim\Views\TwigExtension;
@@ -17,12 +18,10 @@ use Spot\Config;
 return [
     "settings" => [
         "db" => [
-            "dsn" => "mysql:host=localhost;dbname=blog",
-            "username" => "root",
-            "password" => "",
             "spot2" => "mysql://root@localhost/blog"
         ],
-        "templatesDirectory" => "../templates"
+        "templatesDirectory" => "../templates",
+        "secret_key" => "<your_key_goes_here>"
     ],
 
     'view' => function ($c) {
@@ -48,20 +47,8 @@ return [
                 $c[BlogDomain::class]
             );
     },
-
-    PDO::class => /**
-     * @param $c
-     * @return \PDO
-     */
-        function ($c) {
-        return new PDO(
-            $c['settings']['db']['dsn'],
-            $c['settings']['db']['username'],
-            $c['settings']['db']['password']
-        );
-    },
     BlogDomain::class => function ($c) {
-        return new BlogDomain($c[PDO::class]);
+        return new BlogDomain($c[Locator::class]);
     },
     Responder::class => function ($c) {
         return new Responder($c['view']);
@@ -72,6 +59,9 @@ return [
         $cfg->addConnection('mysql', $c['settings']['db']['spot2']);
 
         return new \Spot\Locator($cfg);
+    },
+    SecurityMiddleware::class => function ($c) {
+        return new SecurityMiddleware($c['settings']['key']);
     }
 
 
