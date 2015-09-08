@@ -95,6 +95,7 @@ class BlogDomain extends Domain
      */
     protected function postArrayFromRequest(Request $request, $time = false) {
         $out = [
+            'id' => $request->getParsedBody()['id'],
             'title' => $request->getParsedBody()['title'],
             'body' => $request->getParsedBody()['body'],
             'status' => $request->getParsedBody()['status'],

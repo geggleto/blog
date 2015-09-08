@@ -19,9 +19,11 @@ https://github.com/pmjones/adr
 Installation
 ------------
 - Change your API key! edit the src/config.php file and change your key!
-- Change your DB Information
+- Update your DB Connection!
+- Setup your web server, the http webroot should be the public directory
+- Run Composer Update
 - Run the migration
-- Bam you are done
+- Done!
 
 Usage
 -----
