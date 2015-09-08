@@ -8,6 +8,8 @@
 
 namespace Blog\Blog;
 use Blog\Domain\Domain;
+use Blog\Factory\PostFactory;
+use Blog\Repository\PostRepository;
 use Slim\Http\Request;
 use Spot\Locator;
 use Blog\Entities\Post;
@@ -29,57 +31,11 @@ class BlogDomain extends Domain
     /**
      * @param \Slim\Http\Request $request
      * @return \Blog\Entities\Post
-     * @throws \Spot\InvalidArgumentException
      */
     public function createPost(Request $request) {
-        /** @var $mapper \Spot\Mapper */
-        $mapper = $this->locator->mapper(Post::class);
-
-        /** @var $entity \Blog\Entities\Post */
-        $entity = $mapper->build($this->postArrayFromRequest($request, true));
-
-        $mapper->save($entity);
-
+        $postFactory = new PostFactory($this->locator);
+        $entity = $postFactory->create($this->postArrayFromRequest($request, true));
         return $entity;
-    }
-
-    /**
-     * @param \Slim\Http\Request $request
-     * @return \Blog\Entities\Post
-     * @throws \Spot\InvalidArgumentException
-     */
-    public function updatePost(Request $request) {
-        /** @var $mapper \Spot\Mapper */
-        $mapper = $this->locator->mapper(Post::class);
-
-        /** @var $entity \Blog\Entities\Post */
-        $entity = $this->getPostEntity($request);
-
-        if ($entity !== false) {
-            $entity->data($this->postArrayFromRequest($request, false));
-            $mapper->save($entity);
-        }
-
-        return $entity;
-    }
-
-    /**
-     * @param \Slim\Http\Request $request
-     * @return \Blog\Entities\Post
-     */
-    public function removePost(Request $request) {
-        /** @var $mapper \Spot\Mapper */
-        $mapper = $this->locator->mapper(Post::class);
-
-        /** @var $entity \Blog\Entities\Post */
-        $entity = $this->getPostEntity($request);
-
-        if ($entity !== false) {
-            return $mapper->delete(Post::class, ['id' => $entity->id]);
-        } else {
-            return false;
-        }
-
     }
 
     /**
@@ -87,14 +43,50 @@ class BlogDomain extends Domain
      * @return \Blog\Entities\Post
      */
     public function getPostEntity(Request $request) {
-        /** @var $mapper \Spot\Mapper */
-        $mapper = $this->locator->mapper(Post::class);
-
-        /** @var $entity \Blog\Entities\Post */
-        $entity = $mapper->get($request->getParsedBody()['id']);
-
+        $postRepo = new PostRepository($this->locator);
+        $entity = $postRepo->getPostEntity($this->postArrayFromRequest($request, false));
         return $entity;
     }
+
+    /**
+     * @param \Slim\Http\Request $request
+     * @return \Blog\Entities\Post
+     */
+    public function updatePost(Request $request) {
+        $postRepo = new PostRepository($this->locator);
+        $entity = $postRepo->updatePost($this->postArrayFromRequest($request, false));
+        return $entity;
+    }
+
+    /**
+     * @param \Slim\Http\Request $request
+     * @return bool|\Doctrine\DBAL\Driver\Statement|int
+     */
+    public function removePost(Request $request) {
+        $postRepo = new PostRepository($this->locator);
+        $entity = $postRepo->removePost($this->postArrayFromRequest($request, false));
+        return $entity;
+    }
+
+    /**
+     * @param \Slim\Http\Request $request
+     * @return mixed
+     */
+    public function getLastFivePosts(Request $request) {
+        $postRepo = new PostRepository($this->locator);
+        $posts = $postRepo->getLastFivePosts();
+        return $posts;
+    }
+
+
+    public function migrate() {
+        /** @var $mapper \Spot\Mapper */
+        $mapper = $this->locator->mapper(Post::class);
+        $mapper->migrate();
+    }
+
+
+    //Blog Services
 
     /**
      * @param \Slim\Http\Request $request
@@ -112,23 +104,5 @@ class BlogDomain extends Domain
         }
 
         return $out;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getLastFivePosts() {
-        /** @var $mapper \Spot\Mapper */
-        $mapper = $this->locator->mapper(Post::class);
-        return $mapper->where(['status' => 1])
-                ->limit(5)
-                ->order(['date_created' => 'DESC']);
-    }
-
-
-    public function migrate() {
-        /** @var $mapper \Spot\Mapper */
-        $mapper = $this->locator->mapper(Post::class);
-        $mapper->migrate();
     }
 }

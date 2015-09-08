@@ -89,7 +89,7 @@ class BlogController
      * @return \Psr\Http\Message\ResponseInterface
      */
     public function homePage(Request $request, Response $response, $args) {
-        $posts = $this->domain->getLastFivePosts();
+        $posts = $this->domain->getLastFivePosts($request);
         return $this->responder->renderTwigTemplate($response, "home.twig", []);
     }
 
