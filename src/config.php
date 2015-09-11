@@ -14,6 +14,7 @@ use Slim\Views\TwigExtension;
 use Blog\Blog\BlogController;
 use Spot\Locator;
 use Spot\Config;
+use Blog\Factory\ResponderFactory;
 
 return [
     "settings" => [
@@ -43,15 +44,12 @@ return [
     BlogController::class =>
         function ($c) {
             return new BlogController(
-                $c[Responder::class],
+                $c[ResponderFactory::class],
                 $c[BlogDomain::class]
             );
     },
     BlogDomain::class => function ($c) {
         return new BlogDomain($c[Locator::class]);
-    },
-    Responder::class => function ($c) {
-        return new Responder($c['view']);
     },
     Locator::class => function ($c) {
         $cfg = new Config();
@@ -62,6 +60,9 @@ return [
     },
     SecurityMiddleware::class => function ($c) {
         return new SecurityMiddleware($c['settings']['key']);
+    },
+    ResponderFactory::class => function ($c) {
+        return new ResponderFactory($c['view']);
     }
 
 
