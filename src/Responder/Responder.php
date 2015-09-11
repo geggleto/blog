@@ -29,22 +29,4 @@ class Responder
         $this->view = $twig;
     }
 
-    /**
-     * @param \Slim\Http\Response $response
-     * @param array               $data
-     * @return \Slim\Http\Response
-     */
-    public function renderJSON(Response $response, $data = []) {
-        return $response->write(json_encode($data));
-    }
-
-    /**
-     * @param \Slim\Http\Response $response
-     * @param                     $template
-     * @param array               $data
-     * @return \Psr\Http\Message\ResponseInterface
-     */
-    public function renderTwigTemplate(Response $response, $template, $data = []) {
-        return $this->view->render($response, $template, $data);
-    }
 }

@@ -12,6 +12,11 @@ namespace Blog\Middleware;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
+/**
+ * Class SecurityMiddleware
+ *
+ * @package Blog\Middleware
+ */
 class SecurityMiddleware
 {
     /**
@@ -29,6 +34,12 @@ class SecurityMiddleware
     }
 
 
+    /**
+     * @param \Slim\Http\Request  $request
+     * @param \Slim\Http\Response $response
+     * @param                     $next
+     * @return \Slim\Http\Response
+     */
     public function __invoke(Request $request, Response $response, $next) {
         $requestKey = $request->getParsedBody()["api_key"];
         if ($this->key === $requestKey) {

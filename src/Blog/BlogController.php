@@ -9,14 +9,20 @@
 namespace Blog\Blog;
 
 
+use Blog\Factory\ResponderFactory;
 use Blog\Responder\Responder;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
+/**
+ * Class BlogController
+ *
+ * @package Blog\Blog
+ */
 class BlogController
 {
     /**
-     * @var \Blog\Responder\Responder
+     * @var \Blog\Factory\ResponderFactory
      */
     protected $responder;
 
@@ -28,10 +34,10 @@ class BlogController
     /**
      * BlogController constructor.
      *
-     * @param \Blog\Responder\Responder $responder
+     * @param \Blog\Factory\ResponderFactory $responder
      * @param \Blog\Blog\BlogDomain     $domain
      */
-    public function __construct(Responder $responder, BlogDomain $domain) {
+    public function __construct(ResponderFactory $responder, BlogDomain $domain) {
         $this->responder = $responder;
         $this->domain = $domain;
     }
@@ -45,7 +51,8 @@ class BlogController
     public function create(Request $request, Response $response, $args)
     {
         $entity = $this->domain->createPost($request);
-        return $this->responder->renderJSON($response, $entity->data());
+        $jsonResponder = $this->responder->getJsonResponder();
+        return $jsonResponder->renderJSON($response, $entity->data());
     }
 
     /**
@@ -56,7 +63,8 @@ class BlogController
      */
     public function get(Request $request, Response $response, $args) {
         $entity = $this->domain->getPostEntity($request);
-        return $this->responder->renderJSON($response, $entity->data());
+        $jsonResponder = $this->responder->getJsonResponder();
+        return $jsonResponder->renderJSON($response, $entity->data());
     }
 
     /**
@@ -67,7 +75,8 @@ class BlogController
      */
     public function update(Request $request, Response $response, $args) {
         $entity = $this->domain->updatePost($request);
-        return $this->responder->renderJSON($response, $entity->data());
+        $jsonResponder = $this->responder->getJsonResponder();
+        return $jsonResponder->renderJSON($response, $entity->data());
     }
 
     /**
@@ -78,7 +87,8 @@ class BlogController
      */
     public function remove(Request $request, Response $response, $args) {
         $entity = $this->domain->removePost($request);
-        return $this->responder->renderJSON($response, $entity->data());
+        $jsonResponder = $this->responder->getJsonResponder();
+        return $jsonResponder->renderJSON($response, $entity->data());
     }
 
 
@@ -90,7 +100,8 @@ class BlogController
      */
     public function homePage(Request $request, Response $response, $args) {
         $posts = $this->domain->getLastFivePosts($request);
-        return $this->responder->renderTwigTemplate($response, "home.twig", []);
+        $htmlResponder = $this->responder->getHtmlResponder();
+        return $htmlResponder->renderTwigTemplate($response, "home.twig", []);
     }
 
     /**
@@ -101,6 +112,7 @@ class BlogController
      */
     public function migrate(Request $request, Response $response, $args) {
         $this->domain->migrate();
-        return $this->responder->renderJSON($response, ["status" => "done"]);
+        $jsonResponder = $this->responder->getJsonResponder();
+        return $jsonResponder->renderJSON($response, ["status" => "done"]);
     }
 }

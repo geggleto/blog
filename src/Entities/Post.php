@@ -12,6 +12,11 @@ namespace Blog\Entities;
 use Spot\Entity;
 use Spot\Mapper;
 
+/**
+ * Class Post
+ *
+ * @package Blog\Entities
+ */
 class Post extends Entity
 {
     protected static $table = 'posts';

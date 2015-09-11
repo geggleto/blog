@@ -12,6 +12,11 @@ namespace Blog\Repository;
 use Blog\Entities\Post;
 use Spot\Locator;
 
+/**
+ * Class PostRepository
+ *
+ * @package Blog\Repository
+ */
 class PostRepository
 {
     /**

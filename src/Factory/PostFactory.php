@@ -14,6 +14,11 @@ use Blog\Entities\Post;
 use Slim\Http\Request;
 use Spot\Locator;
 
+/**
+ * Class PostFactory
+ *
+ * @package Blog\Factory
+ */
 class PostFactory
 {
     /**
