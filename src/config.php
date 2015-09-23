@@ -58,7 +58,7 @@ return [
         return new \Spot\Locator($cfg);
     },
     SecurityMiddleware::class => function ($c) {
-        return new SecurityMiddleware($c['settings']['key']);
+        return new SecurityMiddleware($c['settings']['secret_key']);
     },
     ResponderFactory::class => function ($c) {
         return new ResponderFactory($c['view']);
