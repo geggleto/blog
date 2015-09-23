@@ -8,7 +8,6 @@
 
 use Blog\Blog\BlogDomain;
 use Blog\Middleware\SecurityMiddleware;
-use Blog\Responder\Responder;
 use Slim\Views\Twig;
 use Slim\Views\TwigExtension;
 use Blog\Blog\BlogController;
